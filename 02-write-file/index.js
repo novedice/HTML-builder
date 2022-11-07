@@ -13,5 +13,10 @@ stdin.on('data', data => {
   let enteredText = '';
   enteredText = data.toString();
   output.write(enteredText);
+process.on('SIGINT', () => {
+    // stdout.write('Bye, good luck!');
+    process.exit();
 });
-process.on('exit', exit => stdout.write('Bye, good luck!'));
+
+});
+process.on('exit', exit => console.log('\nBye, good luck!'));
