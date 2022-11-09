@@ -18,7 +18,7 @@ fs.readdir(path.join(__dirname, 'secret-folder'),
                               console.log(error);
                             } else {
                                 let size = stats.size;
-                                s += ' - ' + `${size/1000}` + 'kb';
+                                s += ' - ' + `${size/1024}` + 'kb';
                                 console.log(s);
                             };
                         });
