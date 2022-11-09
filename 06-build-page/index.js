@@ -3,16 +3,12 @@ const path = require('path'),
 let indexHtml;
 fs.mkdir(path.join(__dirname, 'project-dist'),
 {recursive: true}, (err) => {
-    if (err) {
-        // console.log(err);
-    };
+    if (err) {};
 });
 function copyDir(pathOrigin, pathCopy) {
     fs.mkdir((pathCopy),
     {recursive: true}, (err) => {
-        if (err) {
-                    // console.log(err);
-                };
+        if (err) {};
         }
     )
     fs.readdir(pathOrigin, 
@@ -35,13 +31,49 @@ function copyDir(pathOrigin, pathCopy) {
                     }
                 })
             }
-        })
+    })
+    checkIfInOrigin(pathCopy, pathOrigin);
+    function checkIfInOrigin(pathCopy, pathOrigin) {
+        fs.readdir(pathCopy,
+        {withFileTypes: true},
+        (err, files) => {
+            if(err) {
+                console.log(err);
+            } else {
+                files.forEach(file => {
+                    if(!file.isFile()) {
+                        fs.access(path.join(pathOrigin, file.name), (err) => {
+                            if (err) {
+                                fs.rm(path.join(pathCopy, file.name),
+                                {recursive: true}, (err) => {
+                                if (err) {
 
-};
+                                }
+                            })
+                            } else {
+                                checkIfInOrigin(path.join(pathCopy, file.name), path.join(pathOrigin, file.name));
+                            }
+                        })
+                        
+                    } else {
+                        fs.access(path.join(pathOrigin, file.name), (err) => {
+                            if (err) {
+                        fs.unlink(path.join(pathCopy, file.name), err => {
+                            if (err) {console.log(err)};
+                        })
+                        }
+                        })
+                    }
+        })
+    }
+    })
+}
+}
+
 copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
 
 const fsAs = require('fs/promises');
-const { resolve } = require('path');
+// const { resolve } = require('path');
 
 async function readingFile() {
     let fileContent = [];
